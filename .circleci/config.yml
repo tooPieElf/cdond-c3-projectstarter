@@ -131,6 +131,8 @@ jobs:
 workflows:
   default:
     jobs:
+      - notify:
+          context: SLACK-API-CONNECT
       - build-frontend
       - build-backend
       - test-frontend:
