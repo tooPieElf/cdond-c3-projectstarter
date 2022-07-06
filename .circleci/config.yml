@@ -18,12 +18,21 @@ commands:
             aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
 
 jobs:
-
-  notify:
+  build-frontend:
     docker:
-      - image: 'cimg/base:stable'
+      - image: circleci/node:13.8.0
     steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Build front-end
+          command: |
+            cd frontend
+            npm install
+            npm run build
       - slack/notify:
+          context: SLACK-API-CONNECT
           custom: |
             {
               "blocks": [
@@ -40,24 +49,6 @@ jobs:
               ]
             }
           event: always
-
-
-  build-frontend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [frontend-build]
-      - run:
-          name: Build front-end
-          command: |
-            cd frontend
-            npm install
-            npm run build
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
       - slack/notify:
           event: pass
           template: success_tagged_deploy_1
@@ -100,7 +91,6 @@ jobs:
 
   test-backend:
     docker:
-    # Docker image here
       - image: circleci/node:13.8.0
     steps:
       - checkout
@@ -155,8 +145,6 @@ jobs:
 workflows:
   default:
     jobs:
-      - notify:
-          context: SLACK-API-CONNECT
       - build-frontend
       - build-backend
       - test-frontend:
