@@ -160,10 +160,14 @@ workflows:
       - build-backend:
           context: SLACK-API-CONNECT
       - test-frontend:
+          context: SLACK-API-CONNECT
           requires: [build-frontend]
       - test-backend:
+          context: SLACK-API-CONNECT
           requires: [build-backend]
       - scan-backend:
+          context: SLACK-API-CONNECT
           requires: [build-backend]
       - scan-frontend:
+          context: SLACK-API-CONNECT
           requires: [build-frontend]
