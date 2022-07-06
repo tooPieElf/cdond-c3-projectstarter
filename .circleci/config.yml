@@ -32,11 +32,9 @@ jobs:
             npm install
             npm run build
       - slack/notify:
-          branch_pattern: master
           event: fail
           template: basic_fail_1
       - slack/notify:
-          channel: ascendancy-dev
           event: pass
           template: success_tagged_deploy_1
       - save_cache:
