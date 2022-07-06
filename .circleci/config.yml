@@ -32,25 +32,11 @@ jobs:
             npm install
             npm run build
       - slack/notify:
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-          event: always
-      - slack/notify:
           event: pass
           template: success_tagged_deploy_1
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -69,7 +55,12 @@ jobs:
             cd backend
             npm install
             npm run build
-
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -87,6 +78,12 @@ jobs:
             cd frontend
             npm install
             npm run test
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
   test-backend:
     docker:
@@ -101,7 +98,12 @@ jobs:
             cd backend
             npm install
             npm run test
-
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
   scan-frontend:
     docker:
     # Docker image here
@@ -120,7 +122,12 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
-
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -138,15 +145,20 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
-
-
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
 workflows:
   default:
     jobs:
       - build-frontend:
           context: SLACK-API-CONNECT
-      - build-backend
+      - build-backend:
+          context: SLACK-API-CONNECT
       - test-frontend:
           requires: [build-frontend]
       - test-backend:
