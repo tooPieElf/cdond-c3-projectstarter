@@ -32,7 +32,6 @@ jobs:
             npm install
             npm run build
       - slack/notify:
-          context: SLACK-API-CONNECT
           custom: |
             {
               "blocks": [
@@ -145,7 +144,8 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
+      - build-frontend:
+          context: SLACK-API-CONNECT
       - build-backend
       - test-frontend:
           requires: [build-frontend]
