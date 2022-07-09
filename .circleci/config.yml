@@ -296,5 +296,5 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure
       - configure_infrastructure
-      - run-migrations
-      - deploy-frontend
+#      - run-migrations
+#      - deploy-frontend
