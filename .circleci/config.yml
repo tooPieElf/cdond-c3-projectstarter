@@ -8,6 +8,9 @@ orbs:
 commands:
   # Exercise - Rollback
   destroy_environment:
+    parameters:
+      workflowId:
+        type: string
     steps:
       - run:
           name: Destroy environment
@@ -188,9 +191,9 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - inventory.txt
+            - .circleci/ansible/inventory.txt
+      - destroy_environment:
 
-      - destroy_environment
 
 
 
