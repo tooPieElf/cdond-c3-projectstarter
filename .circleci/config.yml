@@ -9,8 +9,6 @@ commands:
   # Exercise - Rollback
   destroy_environment:
     parameters:
-      workflowId:
-        type: string
     steps:
       - run:
           name: Destroy environment
