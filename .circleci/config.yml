@@ -14,8 +14,6 @@ commands:
     steps:
       - run:
           name: Destroy environment
-          # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable
-          # ${CIRCLE_WORKFLOW_ID:0:5} takes the
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
@@ -192,7 +190,7 @@ jobs:
           root: ~/
           paths:
             - /ansible
-      - destroy_environment:
+      - destroy_environment
 
 
 
