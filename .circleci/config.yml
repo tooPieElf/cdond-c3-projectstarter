@@ -297,3 +297,6 @@ workflows:
           context: SLACK-API-CONNECT
           requires: [build-frontend]
       - deploy-infrastructure
+      - configure_infrastructure
+      - run-migrations
+      - deploy-frontend
