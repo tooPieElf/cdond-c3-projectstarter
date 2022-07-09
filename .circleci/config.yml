@@ -191,6 +191,37 @@ jobs:
       - destroy_environment
 
 
+  configure_infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          # You can get this ID in the section where you registered the SSH Key
+          fingerprints: [ "47:16:e8:f0:4c:e7:54:01:83:f0:b7:78:7d:82:fc:90" ]
+      -attach_workspace:
+        at: .
+      - run:
+          name: Install openssh
+          command: |
+            # install the dependencies needed for ansible playbook
+            apk add --update openssh-client git
+      - run:
+          name: Install dependencies
+          command: |
+            # install the dependencies needed for ansible playbook
+            apk add --update ansible
+            pip install awscli
+      - run:
+          name: Run Playbook and Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+
+      - destroy_environment
+
+
+
 
 
 workflows:
