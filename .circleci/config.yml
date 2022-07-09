@@ -187,7 +187,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - /ansible
+            - ~/.circleci/ansible/
       - destroy_environment
 
 
