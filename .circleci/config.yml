@@ -8,7 +8,6 @@ orbs:
 commands:
   # Exercise - Rollback
   destroy_environment:
-    parameters:
     steps:
       - run:
           name: Destroy environment
