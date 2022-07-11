@@ -18,7 +18,8 @@ orbs:
 #            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
 commands:
   destroy_environment:
-    description: Destroys back-end and front-end cloudformation stack given a workflow ID.
+    docker:
+      - image: amazon/aws-cli
     parameters:
       workflow_id:
         type: string
