@@ -198,8 +198,10 @@ jobs:
       - add_ssh_keys:
           # You can get this ID in the section where you registered the SSH Key
           fingerprints: [ "47:16:e8:f0:4c:e7:54:01:83:f0:b7:78:7d:82:fc:90" ]
-      - attach_workspace:
-        at: ~/
+      -attach_workspace:
+        - .circleci/ansible/inventory.txt
+#      - attach_workspace:
+#        at: ~/
       - run:
           name: Install openssh
           command: |
@@ -295,6 +297,6 @@ workflows:
           context: SLACK-API-CONNECT
           requires: [build-frontend]
       - deploy-infrastructure
-#      - configure_infrastructure
+      - configure_infrastructure
 #      - run-migrations
 #      - deploy-frontend
