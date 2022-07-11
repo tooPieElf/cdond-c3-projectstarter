@@ -6,16 +6,14 @@ orbs:
 
 
 commands:
-  # Exercise - Rollback
   destroy_environment:
     description: Destroys back-end and front-end cloudformation stack given a workflow ID.
     parameters:
       workflow_id:
         type: string
-
     steps:
       - run:
-          name: Destroy environment
+          name: Destroy environments
           when: on_fail
           command: |
             echo "Destroying environment: << parameters.workflow_id >>"
