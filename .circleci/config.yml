@@ -238,7 +238,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: node:13.8.0/aws-cli
+      - image: circleci/node:13.8.0
 
     steps:
       - checkout
