@@ -247,7 +247,7 @@ jobs:
       - run:
           name: install aws cli
           command: |
-                apk add --update awscli
+            npm i aws-cli
       - run:
           name: Run migration
           command: |
