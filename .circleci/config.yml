@@ -248,6 +248,9 @@ jobs:
           name: Run migration
           command: |
             cd backend
+            npm audit fix --audit-level=critical --force
+            npm audit fix --audit-level=high --force
+            npm audit fix --audit-level=moderate --force
             npm i @nestjs/common@6.0.0
             npm i typeorm@0.2.7
             npm i rxjs@6.4.0
@@ -255,13 +258,12 @@ jobs:
             npm i @nestjs/core@6.0.5
             npm i typescript@4.3.2
             npm i winston@2.4.0
-            npm install
             npm audit fix --force 
             npm update mkdirp --depth 2
             npm update path-parse --depth 3 
             npm update kind-of --depth 10
             npm install --save-dev webpack@5.73.0
-            npm audit fix --audit-level=critical --force
+
             
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
