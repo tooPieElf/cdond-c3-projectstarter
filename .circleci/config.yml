@@ -246,7 +246,7 @@ jobs:
           keys: [backend-build]
       - run:
           name: install aws cli
-            command: |
+          command: |
                 apk add --update awscli
       - run:
           name: Run migration
