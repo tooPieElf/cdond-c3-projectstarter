@@ -317,5 +317,5 @@ workflows:
       - deploy-infrastructure
       - configure_infrastructure
       - run-migrations
-      -
+
 #      - deploy-frontend
