@@ -248,6 +248,13 @@ jobs:
           name: Run migration
           command: |
             cd backend
+            npm i @nestjs/common@6.0.0
+            npm i typeorm@0.2.7
+            npm i rxjs@6.4.0
+            npm i reflect-metadata
+            npm i @nestjs/core@6.0.5
+            npm i typescript@4.3.2
+            npm i winston@2.4.0
             npm install
             npm audit fix --force 
             npm update mkdirp --depth 2
