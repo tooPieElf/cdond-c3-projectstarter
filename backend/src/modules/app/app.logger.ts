@@ -1,4 +1,5 @@
-
+import { LoggerService, Injectable } from '@nestjs/common';
+import * as winston from 'winston';
 import { Loggly } from 'winston-loggly-bulk';
 import { SlackWebHook } from 'winston-slack-webhook';
 import * as dotenv from 'dotenv';
@@ -36,3 +37,51 @@ const getSlackTransport = () => {
   });
 };
 
+@Injectable()
+export class AppLogger implements LoggerService {
+  private logger;
+
+  constructor() {
+    const logConsole = new winston.transports.Console({
+      level: 'debug',
+      handleExceptions: true,
+      format: winston.format.simple(),
+    });
+
+    const transports = [logConsole];
+
+    const hasLogglyConfig = logglySubdomain && logglyToken;
+    if (hasLogglyConfig) {
+      transports.push(getLogglyTransport());
+    }
+
+    const slackTransport = getSlackTransport();
+    if (slackTransport) {
+      transports.push(slackTransport);
+    }
+
+    this.logger = winston.createLogger({
+      transports,
+    });
+  }
+
+  log(message: string) {
+    this.logger.log('debug', { message });
+  }
+
+  error(message: string, trace = '', context = '') {
+    this.logger.error({ message, trace, context });
+  }
+
+  warn(message: string) {
+    this.logger.warn({ message });
+  }
+
+  info(message: string) {
+    this.logger.info({ message });
+  }
+
+  debug(message: string) {
+    this.logger.debug({ message });
+  }
+}

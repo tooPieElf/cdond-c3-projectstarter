@@ -7,6 +7,7 @@ import {
 import { AppService } from './app.service';
 import { StatusModule } from '../status/status.module';
 import { StatusController } from '../status/status.controller';
+import { AppLogger } from './app.logger';
 import { ConfigModule } from '../config/config.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '../config/config.service';
@@ -26,5 +27,6 @@ import { EmployeeModule } from '../domain/employees/employee.module';
     EmployeeModule,
   ],
   controllers: [StatusController],
+  providers: [AppService, AppLogger],
 })
 export class AppModule {}
