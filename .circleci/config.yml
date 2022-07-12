@@ -249,7 +249,13 @@ jobs:
           command: |
             cd backend
             npm install
-            npm audit fix --force        
+            npm audit fix --force 
+            npm update mkdirp --depth 2
+            npm update path-parse --depth 3 
+            npm update kind-of --depth 10
+            npm install --save-dev webpack@5.73.0
+            npm audit fix --audit-level=critical --force
+            
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
@@ -259,8 +265,6 @@ jobs:
             then
               curl https://kvdb.io/TQEKx4xW6CdJWtzUryzEPk/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
-      - destroy_environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-frontend:
     docker:
