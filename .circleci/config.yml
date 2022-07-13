@@ -213,7 +213,6 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          # You can get this ID in the section where you registered the SSH Key
           fingerprints: [ "47:16:e8:f0:4c:e7:54:01:83:f0:b7:78:7d:82:fc:90" ]
       - attach_workspace:
           at: ~/
@@ -258,7 +257,6 @@ jobs:
             npm install 
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
-       #Send migration status to third-party key-value store
       - run:
           name: Send migration results to kvdb.io
           command: |
@@ -308,6 +306,35 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
+  deploy-backend:
+    executor: python
+    steps:
+      - checkout
+      - add_ssh_keys:
+            fingerprints: [ "47:16:e8:f0:4c:e7:54:01:83:f0:b7:78:7d:82:fc:90" ]
+      - attach_workspace:
+          at: ~/
+
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update --no-cache tar gzip nodejs npm aws-cli curl
+            pip install awscli
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            npm install
+            npm run build
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
+
+      # Here's where you will add some code to rollback on failure
+        - destroy_environment:
+            workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 workflows:
   default:
     jobs:
@@ -331,3 +358,4 @@ workflows:
       - configure_infrastructure
       - run-migrations
       - deploy-frontend
+      - deploy-backend

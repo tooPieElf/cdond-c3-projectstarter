@@ -1,1 +1,2 @@
-githuburl = https://github.com/toopieelf/cdond-c3-projectstarter
+url01 = https://github.com/toopieelf/cdond-c3-projectstarter
+url02 = http://udapeople-d3e6b9f.s3-website-us-east-1.amazonaws.com/
