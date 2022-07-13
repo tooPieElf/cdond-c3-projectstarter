@@ -267,6 +267,7 @@ jobs:
             npm update path-parse --depth 3 
             npm update kind-of --depth 10
             npm install --save-dev webpack@5.73.0
+            
 
             
             npm run migrations > migrations_dump.txt
