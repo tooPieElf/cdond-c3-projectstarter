@@ -330,7 +330,7 @@ jobs:
             cd ..
             tar -C backend -czvf artifact.tar.gz .
             sleep 20
-            cd .circleci/ansible
+            cd .
             echo "listing what we have got"
             ls
             echo "Contents  of the inventory.txt file is -------"
