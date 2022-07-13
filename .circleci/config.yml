@@ -323,6 +323,7 @@ jobs:
       - run:
           name: Deploy backend
           command: |
+            aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filter "Name=key-name,Values=udacity" --output text >> .circleci/ansible/inventory.txt
             cd backend
             npm install
             npm run build
