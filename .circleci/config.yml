@@ -337,6 +337,7 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ls
+            sleep 30
             ansible-playbook -i inventory.txt deploy-backend.yml
 
       - destroy_environment:
