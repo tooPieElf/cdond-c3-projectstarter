@@ -318,7 +318,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update --no-cache tar gzip nodejs npm aws-cli curl
+            apk add --update --no-cache tar gzip nodejs npm aws-cli curl ansible
             pip install awscli
       - run:
           name: Deploy backend
@@ -335,7 +335,7 @@ jobs:
             ls
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
-            cd ../..
+            ls
             ansible-playbook -i inventory.txt deploy-backend.yml
 
       - destroy_environment:
