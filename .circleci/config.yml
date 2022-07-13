@@ -330,13 +330,8 @@ jobs:
             cd ..
             tar -C backend -czvf artifact.tar.gz .
             sleep 20
-            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
-            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
-            cd ..
-            echo " the files we've got are"
-            ls
-            cd ..
-            echo " the files we've got are"
+            cd .circleci/ansible
+            echo "listing what we have got"
             ls
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
