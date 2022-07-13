@@ -320,14 +320,14 @@ jobs:
           command: |
             apk add --update --no-cache tar gzip nodejs npm aws-cli curl
             pip install awscli
-            aws --version
       - run:
           name: Deploy backend
           command: |
             cd backend
             npm install
             npm run build
-            tar -C backend -czvf artifact.tar.gz .
+            ls backend/build/
+            tar -c backend -czvf artifact.tar.gz .
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
