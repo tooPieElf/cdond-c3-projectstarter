@@ -276,56 +276,9 @@ jobs:
             fi
       - destroy_environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-#  run-migrations:
-#    docker:
-#      - image: circleci/node:13.8.0
-#
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys: [backend-build]
-#      - run:
-#          name: install aws cli
-#          command: |
-#            npm i aws-cli
-#      - run:
-#          name: Run migration
-#          command: |
-#            cd backend
-#            npm audit fix --audit-level=critical --force
-#            npm audit fix --audit-level=high --force
-#            npm audit fix --audit-level=moderate --force
-#            npm i @nestjs/common@6.0.0
-#            npm i typeorm@0.2.7
-#            npm i rxjs@6.4.0
-#            npm i reflect-metadata
-#            npm i @nestjs/core@6.0.5
-#            npm i typescript@4.3.2
-#            npm i winston@2.4.0
-#            npm audit fix --force
-#            npm update mkdirp --depth 2
-#            npm update path-parse --depth 3
-#            npm update kind-of --depth 10
-#            npm install --save-dev webpack@5.73.0
-#
-#
-#
-#            npm run migrations > migrations_dump.txt
-#            cat migrations_dump.txt
-#      - run:
-#          name: Send migration results to kvdb.io
-#          command: |
-#            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-#            then
-#              curl https://kvdb.io/TQEKx4xW6CdJWtzUryzEPk/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
-#            fi
-#      - destroy_environment:
-#          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-
 
   deploy-frontend:
-    docker:
-      - image: python:3.10-alpine3.16
+    executor: python
     steps:
       - checkout
       - attach_workspace:
@@ -334,6 +287,8 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update --no-cache tar gzip nodejs npm aws-cli curl
+            pip install awscli 
+            aws --version
       - run:
           name: Get backend url
           command: |
@@ -353,7 +308,8 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-
+      - destroy_environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
 workflows:
@@ -378,6 +334,4 @@ workflows:
       - deploy-infrastructure
       - configure_infrastructure
       - run-migrations
-
-
-#      - deploy-frontend
+      - deploy-frontend
