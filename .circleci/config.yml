@@ -327,9 +327,9 @@ jobs:
             npm install
             npm run build
             echo "listing what we have got"
-            ls -la
             tar -C backend -czvf artifact.tar.gz .
-            cd .circleci/ansible
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
