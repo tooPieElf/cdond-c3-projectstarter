@@ -5,6 +5,16 @@ orbs:
   slack: circleci/slack@4.10.1
 
 
+executors:
+  python:
+    docker:
+      - image: python:3.7-alpine3.16
+  aws:
+    docker:
+      - image: amazon/aws-cli
+  node:
+    docker:
+      - image: circleci/node:13.8.0
 ##
 #commands:
 #  # Exercise - Rollback
