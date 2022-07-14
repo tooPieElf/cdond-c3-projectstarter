@@ -327,19 +327,18 @@ jobs:
             cd backend
             npm install
             npm run build
-            echo "listing what we have got"
             cd ..
             tar -C backend -czvf artifact.tar.gz .
-            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mkdir -p ~/.circleci/ansible/roles/deploy/files/
             mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
-            sleep 20
+#            sleep 20
             cd .circleci/ansible
             echo "listing what we have got"
             ls
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ls
-            sleep 30
+#            sleep 30
             ansible-playbook -i inventory.txt deploy-backend.yml
 
       - destroy_environment:
