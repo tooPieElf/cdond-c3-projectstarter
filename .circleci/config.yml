@@ -411,5 +411,5 @@ workflows:
             requires: [deploy-infrastructure]
       - deploy-backend:
             requires: [deploy-infrastructure]
-        - smoke-test:
+      - smoke-test:
             requires: [deploy-backend]
