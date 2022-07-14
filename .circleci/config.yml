@@ -221,6 +221,14 @@ jobs:
           command: |
             # install the dependencies needed for ansible playbook
             apk add --update openssh-client git
+            
+      - run:
+          name: add directory to avoid issues
+          command: |
+            mkdir -p ~/.ssh/config
+            # add some words to the ssh config file
+            echo "StrictHostKeyChecking no" >> ~/.ssh/config
+
       - run:
           name: Install dependencies
           command: |
@@ -400,8 +408,8 @@ workflows:
           context: SLACK-API-CONNECT
           requires: [build-frontend]
       - deploy-infrastructure
-#      - configure_infrastructure:
-#           requires: [deploy-infrastructure]
+      - configure_infrastructure:
+           requires: [deploy-infrastructure]
 #      - run-migrations
 #      - deploy-frontend:
 #            requires: [configure_infrastructure]
