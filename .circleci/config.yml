@@ -232,8 +232,7 @@ jobs:
           name: add directory to avoid issues
           command: |
             # add some words to the ssh config file
-            ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
-            echo "StrictHostKeyChecking no" >> ~/.ssh/config
+            echo "StrictHostKeyChecking=no" >> ~/.ssh/config
       - run:
           name: Run Playbook and Configure server
           command: |
