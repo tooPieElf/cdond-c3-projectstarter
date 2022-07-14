@@ -221,13 +221,6 @@ jobs:
           command: |
             # install the dependencies needed for ansible playbook
             apk add --update openssh-client git
-            
-      - run:
-          name: add directory to avoid issues
-          command: |
-            mkdir -p ~/.ssh/config
-            # add some words to the ssh config file
-            echo "StrictHostKeyChecking no" >> ~/.ssh/config
 
       - run:
           name: Install dependencies
@@ -235,6 +228,11 @@ jobs:
             # install the dependencies needed for ansible playbook
             apk add --update ansible
             pip install awscli
+      - run:
+          name: add directory to avoid issues
+          command: |
+            # add some words to the ssh config file
+            echo "StrictHostKeyChecking no" >> ~/.ssh/config
       - run:
           name: Run Playbook and Configure server
           command: |
