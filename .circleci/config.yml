@@ -332,14 +332,10 @@ jobs:
             tar -C backend -czvf artifact.tar.gz .
             mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
             mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
-#            sleep 20
             cd .circleci/ansible
             echo "listing what we have got"
-            ls
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
-            ls
-#            sleep 30
             ansible-playbook -i inventory.txt deploy-backend.yml
 
       - destroy_environment:
