@@ -235,6 +235,10 @@ jobs:
             echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
             echo "UserKnownHostsFile /dev/null" >> /etc/ssh/ssh_config
             echo "StrictHostKeyChecking=no" >> ~/.ssh/config
+#            if [ -z "$(ssh-keygen -F $IP)" ];
+#            then
+#              ssh-keyscan -H $IP >> ~/.ssh/known_hosts
+#            fi
       - run:
           name: Run Playbook and Configure server
           command: |
@@ -410,10 +414,10 @@ workflows:
       - deploy-infrastructure
       - configure_infrastructure:
            requires: [deploy-infrastructure]
-#      - run-migrations
-#      - deploy-frontend:
-#            requires: [configure_infrastructure]
-#      - deploy-backend:
-#            requires: [configure_infrastructure]
-#      - smoke-test:
-#            requires: [deploy-backend]
+      - run-migrations
+      - deploy-frontend:
+            requires: [configure_infrastructure]
+      - deploy-backend:
+            requires: [configure_infrastructure]
+      - smoke-test:
+            requires: [deploy-backend]
