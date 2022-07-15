@@ -39,5 +39,9 @@
 - name: Executing node
   become: true
   shell: |
+#   print the status of the applictaion to the screen
+    echo "Application status"
+    echo "==================="
+    pm2 status
     pm2 stop all
     pm2 start npm -- start
