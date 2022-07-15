@@ -20,16 +20,16 @@
           value: "{{ lookup('env', 'TYPEORM_ENTITIES') }}"
         - key: TYPEORM_USERNAME
           value: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
-#        - key: TYPEORM_PASSWORD
-#          value: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
-#        - key: TYPEORM_DATABASE
-#          value: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
-#        - key: TYPEORM_HOST
-#          value: "{{ lookup('env', 'TYPEORM_HOST')}}"
-#        - key: TYPEORM_MIGRATIONS_DIR
-#          value: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
-#        - key: TYPEORM_MIGRATIONS
-#          value: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
+        - key: TYPEORM_PASSWORD
+          value: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
+        - key: TYPEORM_DATABASE
+          value: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
+        - key: TYPEORM_HOST
+          value: "{{ lookup('env', 'TYPEORM_HOST')}}"
+        - key: TYPEORM_MIGRATIONS_DIR
+          value: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
+        - key: TYPEORM_MIGRATIONS
+          value: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
 
 
   tasks:
