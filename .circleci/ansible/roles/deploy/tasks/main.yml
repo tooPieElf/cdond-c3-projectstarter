@@ -40,6 +40,5 @@
   become: true
   shell: |
     echo "seeing the status of things before running"
-    pm2 status
     pm2 stop all
-    pm2 start npm -- start
+    sudo pm2 start npm -- start
