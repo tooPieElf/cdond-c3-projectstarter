@@ -469,5 +469,5 @@ workflows:
             requires: [configure_infrastructure]
       - smoke-test:
             requires: [deploy-backend]
-        - cloudfront-update:
+      - cloudfront-update:
             requires: [smoke-test]
