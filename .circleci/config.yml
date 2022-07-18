@@ -460,18 +460,29 @@ jobs:
               --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
             echo Stack names: "${STACKS[@]}"
             export OldWorkflowID="$WorkFlowID"
-            if [[ "$OldWorkflowID" =~ "CurrentWorkflowID"  ]]
-            then
-              echo "$OldWorkflowID" is not the same as "$WorkFlowID" deleting Old Stack
-              aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
-              aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
-              aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
-            
-              aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkFlowID"
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkFlowID"
-            else
-              echo "nothing to needs to be done..."
-            fi
+            while read -r stack; do
+              echo "Checking stack: ${CurrentWorkflowID}"
+              if [[ "${CurrentWorkflowID}" == *"$OldWorkflowID"* ]]; then
+                echo "Deleting stack: $OldWorkFlowID"
+                aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkFlowID"
+                aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkFlowID"
+                aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
+                aws s3 rb "s3://udapeople-$OldWorkFlowID-logs" --force
+                aws s3 rm "s3://udapeople-$OldWorkFlowID" --force
+                aws cloudformation delete-stack --stack-name $stack
+              fi
+#            if [[ "$OldWorkflowID" =~ "CurrentWorkflowID"  ]]
+#            then
+#              echo "$OldWorkflowID" is not the same as "$WorkFlowID" deleting Old Stack
+#              aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
+#              aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
+#              aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
+#
+#              aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkFlowID"
+#              aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkFlowID"
+#            else
+#              echo "nothing to needs to be done..."
+#            fi
 #      - slack/notify:
 #          event: fail
 #          template: basic_fail_1
@@ -479,6 +490,12 @@ jobs:
 #          event: pass
 #          template: success_tagged_deploy_1
 
+
+#how to get OldWorkFlowID from the previous deployment
+#export OldWorkFlowID=$(aws cloudformation \
+#  list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+#  --no-paginate --output text)
+#echo OldWorkFlowID: "${OldWorkFlowID}"
 
 workflows:
   default:
