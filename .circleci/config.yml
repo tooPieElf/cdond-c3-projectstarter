@@ -336,6 +336,8 @@ jobs:
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --region=us-east-1 --recursive
       - destroy_environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert_migration:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
   deploy-backend:
@@ -404,11 +406,13 @@ jobs:
             echo ${URL}
             if curl -s ${URL} | grep "Welcome"
             then
-              return 0
+              return 1
             else
               return 1
             fi
       - destroy_environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert_migration:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
 workflows:
