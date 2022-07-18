@@ -466,23 +466,20 @@ jobs:
                 echo "Deleting stack: $OldWorkFlowID"
                 aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkFlowID"
                 aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkFlowID"
-                aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
-                aws s3 rb "s3://udapeople-$OldWorkFlowID-logs" --force
-                aws s3 rm "s3://udapeople-$OldWorkFlowID" --force
-                aws cloudformation delete-stack --stack-name $stack
               fi
-#            if [[ "$OldWorkflowID" =~ "CurrentWorkflowID"  ]]
-#            then
-#              echo "$OldWorkflowID" is not the same as "$WorkFlowID" deleting Old Stack
-#              aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
-#              aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
-#              aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
-#
-#              aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkFlowID"
-#              aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkFlowID"
-#            else
-#              echo "nothing to needs to be done..."
-#            fi
+            done <<< "$STACKS"
+            if [[ "$OldWorkflowID" =~ "CurrentWorkflowID"  ]]
+            then
+              echo "$OldWorkflowID" is not the same as "$WorkFlowID" deleting Old Stack
+              aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
+              aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
+              aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
+            
+              aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkFlowID"
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkFlowID"
+            else
+              echo "nothing to needs to be done..."
+            fi
 #      - slack/notify:
 #          event: fail
 #          template: basic_fail_1
@@ -500,34 +497,33 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend:
-          context: SLACK-API-CONNECT
-      - build-backend:
-          context: SLACK-API-CONNECT
-      - test-frontend:
-          context: SLACK-API-CONNECT
-          requires: [build-frontend]
-      - test-backend:
-          context: SLACK-API-CONNECT
-          requires: [build-backend]
-      - scan-backend:
-          context: SLACK-API-CONNECT
-          requires: [build-backend]
-      - scan-frontend:
-          context: SLACK-API-CONNECT
-          requires: [build-frontend]
-      - deploy-infrastructure
-      - configure_infrastructure:
-           requires: [deploy-infrastructure]
-      - run-migrations
-      - deploy-frontend:
-            requires: [configure_infrastructure]
-      - deploy-backend:
-            requires: [configure_infrastructure]
-      - smoke-test:
-            requires: [deploy-backend]
-      - cloudfront-update:
-            requires: [smoke-test]
-      - cleanup:
-            requires: [cloudfront-update]
+#      - build-frontend:
+#          context: SLACK-API-CONNECT
+#      - build-backend:
+#          context: SLACK-API-CONNECT
+#      - test-frontend:
+#          context: SLACK-API-CONNECT
+#          requires: [build-frontend]
+#      - test-backend:
+#          context: SLACK-API-CONNECT
+#          requires: [build-backend]
+#      - scan-backend:
+#          context: SLACK-API-CONNECT
+#          requires: [build-backend]
+#      - scan-frontend:
+#          context: SLACK-API-CONNECT
+#          requires: [build-frontend]
+#      - deploy-infrastructure
+#      - configure_infrastructure:
+#           requires: [deploy-infrastructure]
+#      - run-migrations
+#      - deploy-frontend:
+#            requires: [configure_infrastructure]
+#      - deploy-backend:
+#            requires: [configure_infrastructure]
+#      - smoke-test:
+#            requires: [deploy-backend]
+#      - cloudfront-update:
+#            requires: [smoke-test]
+      - cleanup
 
