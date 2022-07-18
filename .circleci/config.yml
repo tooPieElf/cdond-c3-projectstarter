@@ -29,8 +29,27 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
             aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+            aws s3 rb s3://udapeople-<<parameters.workflow_id>> --force
 
 
+  revert_migration:
+    description: Run Database Migration
+    parameters:
+      workflow_id:
+        type: string
+    steps:
+      - run:
+          name: Revert migrations
+          when: on_fail
+          command: |
+            SUCCESS=$(curl --insecure  https://kvdb.io/HJEsjfEikkKe3JyFZ4NCN5/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            if (($SUCCESS == 1))
+            then
+              cd ~/project/backend
+              npm install
+              npm run build
+              npm run migrations:revert
+            fi
 
 jobs:
   build-frontend:
@@ -385,7 +404,7 @@ jobs:
             echo ${URL}
             if curl -s ${URL} | grep "Welcome"
             then
-              return 1
+              return 0
             else
               return 1
             fi
