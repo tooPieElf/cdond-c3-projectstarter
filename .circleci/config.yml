@@ -29,7 +29,9 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
             aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
-            aws s3 rb s3://udapeople-<<parameters.workflow_id>> --force
+            aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
+            aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+            
 
 
   revert_migration:
@@ -440,6 +442,44 @@ jobs:
       - revert_migration:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
+  cleanup:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: clean up unused stacks
+          command: |
+            export OldWorkFlowID=$(aws cloudformation \
+              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+              --no-paginate --output text)
+            echo OldWorkFlowID: "${OldWorkFlowID}"
+            export CurrentWorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"
+            echo CurrentWorkflowID: "${CurrentWorkflowID}"
+            export STACKS=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+              --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
+            echo Stack names: "${STACKS[@]}"
+            export OldWorkflowID="$WorkFlowID"
+            if [[ "$OldWorkflowID" =~ "CurrentWorkflowID"  ]]
+            then
+              echo "$OldWorkflowID" is not the same as "$WorkFlowID" deleting Old Stack
+              aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
+              aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
+              aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
+            
+              aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkFlowID"
+              aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkFlowID"
+            else
+              echo "nothing to needs to be done..."
+            fi
+#      - slack/notify:
+#          event: fail
+#          template: basic_fail_1
+#      - slack/notify:
+#          event: pass
+#          template: success_tagged_deploy_1
+
+
 workflows:
   default:
     jobs:
@@ -471,4 +511,6 @@ workflows:
             requires: [deploy-backend]
       - cloudfront-update:
             requires: [smoke-test]
+      - cleanup:
+            requires: [cloudfront-update]
 
