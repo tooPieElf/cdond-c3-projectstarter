@@ -279,8 +279,6 @@ jobs:
           command: |
             apk add --update curl openssh nodejs npm
             pip install awscli
-            npm --version
-            aws --version
       - restore_cache:
           keys: ['backend-build']
       - run:
@@ -513,6 +511,6 @@ workflows:
             requires: [deploy-frontend, deploy-backend]
       - cloudfront-update:
             requires: [configure_infrastructure]
-#      - cleanup:
-#            requires: [cloudfront-update]
+      - cleanup:
+            requires: [cloudfront-update]
 
