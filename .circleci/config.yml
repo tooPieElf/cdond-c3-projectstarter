@@ -463,12 +463,13 @@ jobs:
             if [ "$OldWorkflowID" != "CurrentWorkflowID"  ]
             then
               echo "$OldWorkflowID" is not the same as "$WorkFlowID" deleting Old Stack
-              aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
-              aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
-              aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
-
               aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkFlowID"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkFlowID"
+#              aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
+              aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
+#              aws s3 rb s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --force
+
+
             else
               echo "nothing to needs to be done..."
             fi
