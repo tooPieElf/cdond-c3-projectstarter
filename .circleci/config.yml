@@ -465,6 +465,7 @@ jobs:
               echo "$OldWorkflowID" is not the same as "$WorkFlowID" deleting Old Stack
               aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkFlowID"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkFlowID"
+              aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
               aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
             else
               echo "nothing to needs to be done..."
@@ -486,33 +487,33 @@ jobs:
 workflows:
   default:
     jobs:
-#      - build-frontend:
-#          context: SLACK-API-CONNECT
-#      - build-backend:
-#          context: SLACK-API-CONNECT
-#      - test-frontend:
-#          context: SLACK-API-CONNECT
-#          requires: [build-frontend]
-#      - test-backend:
-#          context: SLACK-API-CONNECT
-#          requires: [build-backend]
-#      - scan-backend:
-#          context: SLACK-API-CONNECT
-#          requires: [build-backend]
-#      - scan-frontend:
-#          context: SLACK-API-CONNECT
-#          requires: [build-frontend]
-#      - deploy-infrastructure
-#      - configure_infrastructure:
-#           requires: [deploy-infrastructure]
-#      - run-migrations
-#      - deploy-frontend:
-#            requires: [configure_infrastructure]
-#      - deploy-backend:
-#            requires: [configure_infrastructure]
-#      - smoke-test:
-#            requires: [deploy-backend]
-#      - cloudfront-update:
-#            requires: [smoke-test]
+      - build-frontend:
+          context: SLACK-API-CONNECT
+      - build-backend:
+          context: SLACK-API-CONNECT
+      - test-frontend:
+          context: SLACK-API-CONNECT
+          requires: [build-frontend]
+      - test-backend:
+          context: SLACK-API-CONNECT
+          requires: [build-backend]
+      - scan-backend:
+          context: SLACK-API-CONNECT
+          requires: [build-backend]
+      - scan-frontend:
+          context: SLACK-API-CONNECT
+          requires: [build-frontend]
+      - deploy-infrastructure
+      - configure_infrastructure:
+           requires: [deploy-infrastructure]
+      - run-migrations
+      - deploy-frontend:
+            requires: [configure_infrastructure]
+      - deploy-backend:
+            requires: [configure_infrastructure]
+      - smoke-test:
+            requires: [deploy-backend]
+      - cloudfront-update:
+            requires: [smoke-test]
       - cleanup
 
