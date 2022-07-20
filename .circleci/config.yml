@@ -460,7 +460,7 @@ jobs:
               --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
             echo Stack names: "${STACKS[@]}"
             export OldWorkflowID="$WorkFlowID"
-            if [ "$OldWorkflowID" =~ "CurrentWorkflowID"  ]
+            if [ "$OldWorkflowID" != "CurrentWorkflowID"  ]
             then
               echo "$OldWorkflowID" is not the same as "$WorkFlowID" deleting Old Stack
               aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
