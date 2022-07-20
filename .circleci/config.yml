@@ -392,7 +392,7 @@ jobs:
       - run:
           name: Back-end Smoke Test
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filter "Name=tag-key,Values=Name" --output text)
+            export BACKEND_IP=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filter "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
@@ -465,8 +465,8 @@ jobs:
               echo "$OldWorkflowID" is not the same as "$WorkFlowID" deleting Old Stack
               aws cloudformation delete-stack --stack-name "udapeople-backend-$OldWorkFlowID"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-$OldWorkFlowID"
-              aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
-              aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
+#              aws s3 rm "s3://udapeople-$OldWorkFlowID" --recursive
+#              aws s3 rb "s3://udapeople-$OldWorkFlowID" --force
             else
               echo "nothing to needs to be done..."
             fi
