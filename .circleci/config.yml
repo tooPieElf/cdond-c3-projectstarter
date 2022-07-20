@@ -509,9 +509,9 @@ workflows:
       - deploy-backend:
             requires: [configure_infrastructure]
       - smoke-test:
-            requires: [configure_infrastructure]
+            requires: [deploy-frontend, deploy-backend]
       - cloudfront-update:
             requires: [configure_infrastructure]
-      - cleanup:
-            requires: [cloudfront-update]
+#      - cleanup:
+#            requires: [cloudfront-update]
 
