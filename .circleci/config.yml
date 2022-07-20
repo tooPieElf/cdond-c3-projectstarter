@@ -513,6 +513,6 @@ workflows:
             requires: [deploy-frontend, deploy-backend]
       - cloudfront-update:
             requires: [configure_infrastructure]
-      - cleanup:
-            requires: [cloudfront-update]
+#      - cleanup:
+#            requires: [cloudfront-update]
 
