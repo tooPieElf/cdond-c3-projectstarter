@@ -392,7 +392,7 @@ jobs:
       - run:
           name: Back-end Smoke Test
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filter "Name=key-name,Values=udacity" --output text)
+            export BACKEND_IP=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filter "Name=tag-key,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
@@ -503,7 +503,11 @@ workflows:
       - scan-frontend:
           context: SLACK-API-CONNECT
           requires: [build-frontend]
-      - deploy-infrastructure
+      - deploy-infrastructure:
+            requires: [build-backend, build-frontend]
+            filters:
+              branches:
+                only: [ master ]
       - configure_infrastructure:
            requires: [deploy-infrastructure]
       - run-migrations
@@ -512,9 +516,9 @@ workflows:
       - deploy-backend:
             requires: [configure_infrastructure]
       - smoke-test:
-            requires: [deploy-backend]
+            requires: [configure_infrastructure]
       - cloudfront-update:
-            requires: [smoke-test]
+            requires: [configure_infrastructure]
       - cleanup:
             requires: [cloudfront-update]
 
