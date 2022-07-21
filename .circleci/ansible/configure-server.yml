@@ -31,7 +31,6 @@
         - key: TYPEORM_MIGRATIONS
           value: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
 
-
   tasks:
     - name: "install python for Ansible."
       apt:

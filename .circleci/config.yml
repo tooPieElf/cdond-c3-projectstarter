@@ -239,13 +239,11 @@ jobs:
       - run:
           name: Install openssh
           command: |
-            # install the dependencies needed for ansible playbook
             apk add --update openssh-client git
 
       - run:
           name: Install dependencies
           command: |
-            # install the dependencies needed for ansible playbook
             apk add --update ansible
             pip install awscli
       - run:
@@ -255,16 +253,21 @@ jobs:
             echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
             echo "UserKnownHostsFile /dev/null" >> /etc/ssh/ssh_config
             echo "StrictHostKeyChecking=no" >> ~/.ssh/config
-#            if [ -z "$(ssh-keygen -F $IP)" ];
-#            then
-#              ssh-keyscan -H $IP >> ~/.ssh/known_hosts
-#            fi
       - run:
           name: Run Playbook and Configure server
           command: |
             aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filter "Name=key-name,Values=udacity" --output text >> .circleci/ansible/inventory.txt
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
+
+      - run:
+          name: install and run node-exporter
+          command: |
+            wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
+            tar xzf node_exporter-1.0.1.linux-amd64.tar.gz
+            cd node_exporter-1.0.1.linux-amd64/
+            ./node_exporter 
+
 
       - destroy_environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
