@@ -317,7 +317,8 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export API_URL=$(cat backend-url.txt)
+            export BACKEND_IP=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filter "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo "API_URL=${API_URL}" >> frontend/.env
             cat frontend/.env
@@ -329,7 +330,7 @@ jobs:
             npm install
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
-            #delay for 5 seconds to allow the frontend to be deployed
+            #delay for 30 seconds to allow the frontend to be deployed
             sleep 30
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --region=us-east-1 --recursive
       - destroy_environment:
