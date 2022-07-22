@@ -260,14 +260,14 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
 
-      - run:
-          name: install and run node-exporter
-          command: |
-            wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
-            tar xzf node_exporter-1.0.1.linux-amd64.tar.gz
-            cd node_exporter-1.0.1.linux-amd64/
-            ./node_exporter 
-            return 0
+#      - run:
+#          name: install and run node-exporter
+#          command: |
+#            wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
+#            tar xzf node_exporter-1.0.1.linux-amd64.tar.gz
+#            cd node_exporter-1.0.1.linux-amd64/
+#            ./node_exporter
+#            return 0
 
 
       - destroy_environment:
