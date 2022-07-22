@@ -506,7 +506,8 @@ workflows:
                 only: [ master ]
       - configure_infrastructure:
            requires: [deploy-infrastructure]
-      - run-migrations
+      - run-migrations:
+           requires: [deploy-infrastructure]
       - deploy-frontend:
             requires: [configure_infrastructure]
       - deploy-backend:
