@@ -512,13 +512,13 @@ workflows:
       - run-migrations:
            requires: [configure_infrastructure]
       - deploy-frontend:
-            requires: [configure_infrastructure]
+            requires: [run-migrations]
       - deploy-backend:
-            requires: [configure_infrastructure]
+            requires: [run-migrations]
       - smoke-test:
             requires: [deploy-frontend, deploy-backend]
       - cloudfront-update:
             requires: [configure_infrastructure]
-#      - cleanup:
-#            requires: [cloudfront-update]
+      - cleanup:
+            requires: [cloudfront-update]
 
