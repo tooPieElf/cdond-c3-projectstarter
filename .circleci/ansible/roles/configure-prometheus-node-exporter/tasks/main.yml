@@ -23,5 +23,5 @@
   systemd:
     state: restarted
     daemon_reload: yes
-    name: node-exporter
+    name: node_exporter
     enabled: yes
