@@ -260,7 +260,6 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
 
-
       - run:
           name: Run Playbook and Configure server
           command: |
