@@ -266,15 +266,6 @@ jobs:
             aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filter "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text >> .circleci/ansible/inventory.txt
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-prometheus.yml
-#      - run:
-#          name: install and run node-exporter
-#          command: |
-#            wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
-#            tar xzf node_exporter-1.0.1.linux-amd64.tar.gz
-#            cd node_exporter-1.0.1.linux-amd64/
-#            ./node_exporter
-#            return 0
-
 
       - destroy_environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
