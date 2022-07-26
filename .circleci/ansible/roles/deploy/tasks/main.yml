@@ -40,5 +40,4 @@
   become: true
   ansible.builtin.shell: |
     echo "seeing the status of things before running"
-    sudo pm2 stop all
     sudo pm2 start npm -- start
