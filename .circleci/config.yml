@@ -256,7 +256,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-            aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filter "Name=key-name,Values=udacity" --output text >> .circleci/ansible/inventory.txt
+            aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --filter "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text >> .circleci/ansible/inventory.txt
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
 
@@ -420,16 +420,25 @@ jobs:
           command: |
             apk add --update --no-cache tar gzip nodejs npm curl
             pip install awscli
+#      - run:
+#          name: Update cloudfront distribution
+#          command: |
+#            export WorkflowID=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
+#            curl https://kvdb.io/TQEKx4xW6CdJWtzUryzEPk/OldWrkflwId -d "$WorkflowID"
+#            echo WorkflowID: "$WorkflowID"
       - run:
           name: Update cloudfront distribution
           command: |
-            export WorkflowID=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
-            curl https://kvdb.io/TQEKx4xW6CdJWtzUryzEPk/OldWrkflwId -d "$WorkflowID"
-            echo WorkflowID: "$WorkflowID"
-      - run:
-          name: Update cloudfront distribution
-          command: |
+            export OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
+            echo "saving old workflow id: ${OldWorkflowID}"
+            echo $OldWorkFlowID >> ~/OldWorkFlowID.txt
+            echo "printing the content of the old WorkflowID"
+            cat ~/OldWorkFlowID.txt
+            
             aws cloudformation deploy --template-file .circleci/files/cloudfront.yml --stack-name InitialStack --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" --tags project=udapeople
+            echo "listing workflow id"
+            echo OldWorkFlowID = "$OldWorkflowID"
+            echo NewWorkflowID = "${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert_migration:
